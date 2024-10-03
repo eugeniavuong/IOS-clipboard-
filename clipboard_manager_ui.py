@@ -2,8 +2,6 @@ import tkinter as tk
 import pyperclip
 from pynput.keyboard import Controller, Key
 
-#Build my own component here, which takes in the clipboard 
-
 class ClipboardManagerUI:
     def __init__(self, clipboard_manager):
         """Initialize the UI and set up the Tkinter window."""
@@ -26,51 +24,43 @@ class ClipboardManagerUI:
         # Create a keyboard controller to simulate paste action
         self.keyboard_controller = Controller()
 
-
-    
     def update_history(self):
-        print("Updating listbox")
-        self.history_listbox.delete(0, tk.END) # clear the listbox
+        """Update the clipboard history list in the UI."""
+        self.history_listbox.delete(0, tk.END)  # Clear the listbox
 
         # Populate the listbox with the latest clipboard history
-        for item in self.clipboard_monitor.clipboard_history:
+        for item in self.clipboard_manager.clipboard_history:
             self.history_listbox.insert(tk.END, item)
-        
-        # Call this method every 1000ms to refresh listbox with history
-        self.master.after(1000, self.update_listbox)
-    
+
+        # Call this method every 1000ms to refresh the listbox with history
+        self.window.after(1000, self.update_history)
+
     def show_ui(self):
-        """Show the Tkinter window theclipboard hsitory"""
-        self.update_history() #update the window before showing the history
+        """Show the Tkinter window with the clipboard history."""
+        self.update_history()  # Update the window before showing the history
         self.window.deiconify()
-        self.window.lift() # bring this in front of other windows
+        self.window.lift()  # Bring the window in front of other windows
 
     def hide_ui(self, event=None):
-        """Hide the Tkinter window when it loses focus """
-        self.window.withdraw() # hide the window 
+        """Hide the Tkinter window when it loses focus."""
+        self.window.withdraw()  # Hide the window
 
     def copy_and_paste_selected(self, event=None):
-        """Copy the selected item from the listbox to the clipboard and automatically paste"""
+        """Copy the selected item from the listbox to the clipboard and automatically paste."""
         selected_index = self.history_listbox.curselection()
         if selected_index:
             selected_item = self.history_listbox.get(selected_index)
             pyperclip.copy(selected_item)
-            print("copied to clipboard")
+            print("Copied to clipboard:", selected_item)
             self.hide_ui()
             self.simulate_paste()
-    
+
     def simulate_paste(self):
-        """Simulate the cmd +V and paste: macOS-> cmd + v linus/windows-> ctrl + v"""
-        with self.keyboard_controller.pressed(Key.cmd if self.window.tk.call('tk', 'windowingsystem') == 'aqua'else Key.ctrl):
+        """Simulate the Cmd + V (or Ctrl + V) paste action."""
+        with self.keyboard_controller.pressed(Key.cmd if self.window.tk.call('tk', 'windowingsystem') == 'aqua' else Key.ctrl):
             self.keyboard_controller.press('v')
             self.keyboard_controller.release('v')
 
     def start(self):
-        """Start the tkinter mainloop"""
+        """Start the Tkinter main loop."""
         self.window.mainloop()
-
-
-
-
-
-    
