@@ -16,7 +16,7 @@ class ClipboardManagerUI:
         self.history_listbox.pack(pady=10)
 
         # Bind selection event to automatically copy and paste the selected item
-        self.history_listbox.bind('<<ListboxSelect>>', self.copy_and_paste_selected)
+        self.history_listbox.bind('<<ListboxSelect>>', self.copy_selected)
 
         # Bind to hide the window when it loses focus
         self.window.bind("<FocusOut>", self.hide_ui)
@@ -45,15 +45,14 @@ class ClipboardManagerUI:
         """Hide the Tkinter window when it loses focus."""
         self.window.withdraw()  # Hide the window
 
-    def copy_and_paste_selected(self, event=None):
-        """Copy the selected item from the listbox to the clipboard and automatically paste."""
+    def copy_selected(self, event=None):
+        """Copy the selected item from the listbox to the clipboard."""
         selected_index = self.history_listbox.curselection()
         if selected_index:
             selected_item = self.history_listbox.get(selected_index)
-            pyperclip.copy(selected_item)
-            print("Copied to clipboard:", selected_item)
+            pyperclip.copy(selected_item)  # Copy the selected item to clipboard
+            print(f"Copied to clipboard: {selected_item}")
             self.hide_ui()
-            self.simulate_paste()
 
     def simulate_paste(self):
         """Simulate the Cmd + V (or Ctrl + V) paste action."""

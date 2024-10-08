@@ -27,7 +27,6 @@ class ClipboardManager:
                 if current_val != recent_val and current_val != "":
                     recent_val = current_val
                     self.add_to_history(recent_val)
-                print(f"The lastest value in your clipboard is : {recent_val}")
 
                 # Sleep for a short time to reduce CPU usage
                 time.sleep(1)
