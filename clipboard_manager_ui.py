@@ -51,7 +51,6 @@ class ClipboardManagerUI:
         if selected_index:
             selected_item = self.history_listbox.get(selected_index)
             pyperclip.copy(selected_item)  # Copy the selected item to clipboard
-            print(f"Copied to clipboard: {selected_item}")
             self.hide_ui()
 
     def simulate_paste(self):
